@@ -1,0 +1,7 @@
+#ignore everything
+*
+
+# Do not ignore the following
+!.gitignore
+!.bashrc
+
