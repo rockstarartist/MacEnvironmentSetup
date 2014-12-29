@@ -1,15 +1,21 @@
 # Use Mac OS X system proxy if it is configured
-PROXY=`scutil --proxy | awk '\
+export HTTP_PROXY=`scutil --proxy | awk '\
     BEGIN { http_proxy_enabled = ""; http_proxy = ""; http_proxy_port = "80"; } \
     /HTTPEnable/ { http_proxy_enabled = 1; } \
     /HTTPProxy/ { http_proxy = $3; } \
     /HTTPPort/ { http_proxy_port = $3; } \
     END { if (http_proxy_enabled) { print http_proxy ":" http_proxy_port; } }'`
 
+export HTTPS_PROXY=`scutil --proxy | awk '\
+    BEGIN { https_proxy_enabled = ""; https_proxy = ""; https_proxy_port = "80"; } \
+    /HTTPSEnable/ { https_proxy_enabled = 1; } \
+    /HTTPSProxy/ { https_proxy = $3; } \
+    /HTTPSPort/ { https_proxy_port = $3; } \
+    END { if (https_proxy_enabled) { print https_proxy ":" https_proxy_port; } }'`
+
 # Export our proxy data (even if it's blank)
-export HTTP_PROXY="${PROXY}"
-export HTTPS_PROXY="${PROXY}"
-export FTP_PROXY="${PROXY}"
+export http_proxy="${HTTP_PROXY}"
+export https_proxy="${HTTPS_PROXY}"
 
 # Setup Colors for directories, and alias ls with colors
 export PS1="\[\033[36m\]\u\[\033[m\]@\[\033[32m\]\h:\[\033[33;1m\]\w\[\033[m\]\$ "
